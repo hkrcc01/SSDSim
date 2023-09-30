@@ -27,13 +27,44 @@ namespace MQSimEngine
 			delete SentinelNode;
 	}
 
-	///<summary>
-	/// Add
-	/// args: ByVal key As IComparable, ByVal data As Object
-	/// key is object that implements IComparable interface
-	/// performance tip: change to use use int type (such as the hashcode)
-	///</summary>
-	void EventTree::Add(sim_time_type key, Sim_Event* data)
+	std::map<sim_time_type, std::vector<Sim_Object*>> EventTree::Get_queue()
+	{
+		std::map<sim_time_type, std::vector<Sim_Object*>> eq;
+		dfs(&eq, rbTree);
+		return eq;
+	}
+
+	void EventTree::dfs(std::map<sim_time_type, std::vector<Sim_Object*>> *eventqueue, EventTreeNode *cnode)
+    {
+		if (cnode == SentinelNode) return;
+
+		dfs(eventqueue, cnode->Left);
+
+		std::vector<Sim_Object*> q;
+
+		if (cnode->FirstSimEvent == cnode->LastSimEvent)
+		{
+			q.push_back(cnode->FirstSimEvent->Target_sim_object);
+		}
+		for (Sim_Event *e = cnode->FirstSimEvent; e != cnode->LastSimEvent; e = e->Next_event){
+			q.push_back(e->Target_sim_object);
+		}
+		if (cnode->FirstSimEvent != cnode->LastSimEvent)
+		{
+			q.push_back(cnode->LastSimEvent->Target_sim_object);
+		}
+
+		eventqueue->insert( std::pair<sim_time_type, std::vector<Sim_Object*>>( cnode->FirstSimEvent->Fire_time%100, q ) );
+
+		dfs(eventqueue, cnode->Right);
+    }
+    ///< summary>
+    /// Add
+    /// args: ByVal key As IComparable, ByVal data As Object
+    /// key is object that implements IComparable interface
+    /// performance tip: change to use use int type (such as the hashcode)
+    ///</summary>
+    void EventTree::Add(sim_time_type key, Sim_Event* data)
 	{
 		// traverse tree - find where node belongs
 		// create new node

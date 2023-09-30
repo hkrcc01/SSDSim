@@ -2,7 +2,10 @@
 #define EVENT_TREE_H
 
 #include "Sim_Defs.h"
-#include "Sim_Event.h"
+#include "Sim_Object.h"
+
+#include<map>
+#include<vector>
 
 namespace MQSimEngine
 {
@@ -43,7 +46,11 @@ namespace MQSimEngine
 		int Count;
 		//  sentinelNode is convenient way of indicating a leaf node.
 		static EventTreeNode* SentinelNode;
-		void Add(sim_time_type key, Sim_Event* data);
+
+		std::map<sim_time_type, std::vector<Sim_Object*>> Get_queue();
+        void dfs(std::map<sim_time_type, std::vector<Sim_Object*>> *eventqueue, EventTreeNode *cnode);
+
+        void Add(sim_time_type key, Sim_Event* data);
 		void RotateLeft(EventTreeNode* x);
 		void RotateRight(EventTreeNode* x);
 		Sim_Event* GetData(sim_time_type key);
