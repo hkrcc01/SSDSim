@@ -91,6 +91,7 @@ namespace MQSimEngine
 			while (ev != NULL) {
 				if(!ev->Ignore) {
 					//std::map<sim_time_type, std::vector<Sim_Object*>> eq = _EventList->Get_queue();
+					std::cout << ev->Target_sim_object->_id << "--------------------------->" << ev->Fire_time << "\n";
 					ev->Target_sim_object->Execute_simulator_event(ev);
 				}
 				Sim_Event* consumed_event = ev;
