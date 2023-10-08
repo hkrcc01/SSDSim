@@ -54,7 +54,7 @@ namespace MQSimEngine
 			q.push_back(cnode->LastSimEvent->Target_sim_object);
 		}
 
-		eventqueue->insert( std::pair<sim_time_type, std::vector<Sim_Object*>>( cnode->FirstSimEvent->Fire_time%100, q ) );
+		eventqueue->insert( std::pair<sim_time_type, std::vector<Sim_Object*>>( cnode->FirstSimEvent->Fire_time, q ) );
 
 		dfs(eventqueue, cnode->Right);
     }

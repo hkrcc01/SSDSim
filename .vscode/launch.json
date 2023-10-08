@@ -8,7 +8,7 @@
             "name" : "Launch",
             "type": "cppdbg",
             "request": "launch",
-            "stopAtEntry": true,
+            "stopAtEntry": false,
             "program": "${workspaceRoot}/MQSim",
             "externalConsole": false,
             "args": [
