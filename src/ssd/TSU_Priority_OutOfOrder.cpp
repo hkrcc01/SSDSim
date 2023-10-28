@@ -275,26 +275,27 @@ void TSU_Priority_OutOfOrder::Schedule()
 
     for (flash_channel_ID_type channelID = 0; channelID < channel_count; channelID++)
     {
-        if (_NVMController->Get_channel_status(channelID) == BusChannelStatus::IDLE)
-        {
+        // if (_NVMController->Get_channel_status(channelID) == BusChannelStatus::IDLE)
+        // {
             for (unsigned int i = 0; i < chip_no_per_channel; i++)
             {
                 NVM::FlashMemory::Flash_Chip *chip = _NVMController->Get_chip(channelID, Round_robin_turn_of_channel[channelID]);
-                //The TSU does not check if the chip is idle or not since it is possible to suspend a busy chip and issue a new command
-                if (!service_read_transaction(chip))
-                {
-                    if (!service_write_transaction(chip))
-                    {
-                        service_erase_transaction(chip);
-                    }
-                }
+                service_read_transaction(chip);
+                // //The TSU does not check if the chip is idle or not since it is possible to suspend a busy chip and issue a new command
+                // if (!service_read_transaction(chip))
+                // {
+                //     if (!service_write_transaction(chip))
+                //     {
+                //         service_erase_transaction(chip);
+                //     }
+                // }
                 Round_robin_turn_of_channel[channelID] = (flash_chip_ID_type)(Round_robin_turn_of_channel[channelID] + 1) % chip_no_per_channel;
-                if (_NVMController->Get_channel_status(chip->ChannelID) != BusChannelStatus::IDLE)
-                {
-                    break;
-                }
+                // if (_NVMController->Get_channel_status(chip->ChannelID) != BusChannelStatus::IDLE)
+                // {
+                //     break;
+                // }
             }
-        }
+        // }
     }
 }
 

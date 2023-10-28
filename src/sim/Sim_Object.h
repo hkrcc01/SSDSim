@@ -40,7 +40,7 @@ namespace MQSimEngine
 		
 		virtual void Execute_simulator_event(Sim_Event*) = 0;
 		 
-		 sim_object_id_type _id;
+		sim_object_id_type _id;
 
 	private:
 		bool _triggersSetUp;
